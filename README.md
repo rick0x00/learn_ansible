@@ -52,14 +52,14 @@ Testing VM on vagrant with ssh connection
 Making Ansible Inventory
 
 ```bash
-    echo -e "[wordpress]\n <host vagrant vm wordpress>" >> ./hosts
+    echo -e "[wordpress]\n <host vagrant vm wordpress>" >> ./hosts.cfg
 ```
 
 ---
 Testing Ansible connection to hosts
 
 ```bash
-    ansible wordpress -u vagrant --private-key .vagrant/machines/wordpress/virtualbox/private_key -i hosts -m shell -a 'echo Hello, World'
+    ansible wordpress -u vagrant --private-key .vagrant/machines/wordpress/virtualbox/private_key -i ./hosts.cfg -m shell -a 'echo Hello, World'
 ```
 
 ---
@@ -76,7 +76,7 @@ Creating a first Ansible playbook(provisioning.yaml)
 Testing Ansible playbook
 
 ```bash
-    ansible-playbook ./provisioning.yaml -u vagrant -i hosts --private-key ./.vagrant/machines/wordpress/virtualbox/private_key
+    ansible-playbook ./provisioning.yaml -u vagrant -i ./hosts.cfg --private-key ./.vagrant/machines/wordpress/virtualbox/private_key
 ```
 
 ---
@@ -111,7 +111,7 @@ Creating Ansible playbook(lab_playbook.yaml)
 Executing Ansible playbook
 
 ```bash
-    ansible-playbook ./lab_playbook.yaml -u vagrant -i hosts --private-key ./.vagrant/machines/wordpress/virtualbox/private_key
+    ansible-playbook ./lab_playbook.yaml -u vagrant -i ./hosts.cfg --private-key ./.vagrant/machines/wordpress/virtualbox/private_key
 ```
 
 ---
@@ -164,19 +164,19 @@ better
 Executing Ansible playbook
 
 ```bash
-    ansible-playbook ./lab_playbook-v2.yaml -u vagrant -i hosts --private-key ./.vagrant/machines/wordpress/virtualbox/private_key
+    ansible-playbook ./lab_playbook-v2.yaml -u vagrant -i ./hosts.cfg --private-key ./.vagrant/machines/wordpress/virtualbox/private_key
 ```
 
 ---
 Updating Ansible Inventory
 
 ```bash
-    echo -e "[wordpress]\n <host vagrant vm wordpress> ansible_user=vagrant ansible_ssh_private_key_file='./.vagrant/machines/wordpress/virtualbox/private_key'" >> ./hosts
+    echo -e "[wordpress]\n <host vagrant vm wordpress> ansible_user=vagrant ansible_ssh_private_key_file='./.vagrant/machines/wordpress/virtualbox/private_key'" >> ./hosts.cfg
 ```
 
 ---
 Executing Ansible playbook
 
 ```bash
-    ansible-playbook ./lab_playbook-v2.yaml -i hosts
+    ansible-playbook ./lab_playbook-v2.yaml -i ./hosts.cfg
 ```
