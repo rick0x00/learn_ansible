@@ -15,9 +15,17 @@
           - php5-mysql
         state: latest
       become: yes
+
     - name: 'Making MySQL db'
       mysql_db: 
         name: wordpress_db
         login_user: root
         state: present
 
+    - name: 'Creating MySQL database user'
+      mysql_user:
+        login_user: root
+        name: wordpress_user
+        password: 12345
+        priv: 'wordpress_db.*:ALL'
+        state: present

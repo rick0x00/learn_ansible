@@ -200,3 +200,26 @@ Execute Ansible playbook
 ```bash
     ansible-playbook ./lab_playbook-v2.yaml -i ./hosts.cfg
 ```
+
+---
+Create Database user
+
+Add the following text to the end of the `./lab playbook-v2.yaml` file
+
+```yaml
+    - name: 'Creating MySQL database user'
+      mysql_user:
+        login_user: root
+        name: wordpress_user
+        password: 12345
+        priv: 'wordpress_db.*:ALL'
+        state: present
+```
+
+---
+Execute Ansible playbook
+
+```bash
+    ansible-playbook ./lab_playbook-v2.yaml -i ./hosts.cfg
+```
+
