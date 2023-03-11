@@ -61,3 +61,20 @@ Testing Ansible connection to hosts
 ```hosts
     ansible wordpress -u vagrant --private-key .vagrant/machines/wordpress/virtualbox/private_key -i hosts -m shell -a 'echo Hello, World'
 ```
+
+---
+Creating a first Ansible playbook(provisioning.yaml)
+
+```text
+    ---
+    - hosts: all
+    tasks:
+        - shell: "echo 'hello world' > /vagrant/first-task.txt"
+```
+
+---
+Testing Ansible playbook
+
+```shell
+    ansible-playbook ./provisioning.yaml -u vagrant -i hosts --private-key ./.vagrant/machines/wordpress/virtualbox/private_key
+```
