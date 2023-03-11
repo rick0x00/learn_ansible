@@ -146,17 +146,16 @@ better
   tasks:
     - name: "install packages"
       apt:
-        name: [
-          'php5',
-          'apache2',
-          'libapache2-mod-php5',
-          'php5-gd',
-          'libssh2-php',
-          'php5-mcrypt',
-          'mysql-server-5.6',
-          'python-mysqldb',
-          'php5-mysql'
-          ]
+        name:
+          - php5
+          - apache2
+          - libapache2-mod-php5
+          - php5-gd
+          - libssh2-php
+          - php5-mcrypt
+          - mysql-server-5.6
+          - python-mysqldb
+          - php5-mysql
         state: latest
       become: yes
 ```
