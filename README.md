@@ -81,3 +81,35 @@ Testing Ansible playbook
 
 ---
 ---
+start to build lab wordpress
+
+---
+Creating Ansible playbook(lab_playbook.yaml)
+
+```text
+    ---
+    - hosts: all
+    tasks:
+        - name: "Install PHP5"
+        apt:
+            name: php5
+            state: latest
+        become: yes
+        - name: "Install Apache2"
+        apt:
+            name: apache2
+            state: latest
+        become: yes
+        - name: "Install modphp"
+        apt:
+            name: libapache2-mod-php5
+            state: latest
+        become: yes
+```
+
+---
+Executing Ansible playbook
+
+```shell
+    ansible-playbook ./lab_playbook.yaml -u vagrant -i hosts --private-key ./.vagrant/machines/wordpress/virtualbox/private_key
+```
