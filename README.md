@@ -180,3 +180,23 @@ Executing Ansible playbook
 ```bash
     ansible-playbook ./lab_playbook-v2.yaml -i ./hosts.cfg
 ```
+
+---
+Create Database
+
+Add the following text to the end of the `./lab playbook-v2.yaml` file
+
+```yaml
+    - name: 'Making MySQL db'
+      mysql_db: 
+        name: wordpress_db
+        login_user: root
+        state: present
+```
+
+---
+Execute Ansible playbook
+
+```bash
+    ansible-playbook ./lab_playbook-v2.yaml -i ./hosts.cfg
+```
