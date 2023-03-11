@@ -11,7 +11,7 @@ Setting up hostess machine
     - Configuring ssh client
 
 ```shell
-    echo -e "Host 127.0.0.1 \n    PubkeyAcceptedKeyTypes +ssh-rsa" >> ~/.ssh/config
+    echo "PubkeyAcceptedKeyTypes +ssh-rsa" >> ~/.ssh/config
 ```
 
 ---
