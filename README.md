@@ -223,3 +223,28 @@ Execute Ansible playbook
     ansible-playbook ./lab_playbook-v2.yaml -i ./hosts.cfg
 ```
 
+---
+Install Wordpress
+
+Add the following text to the end of the `./lab playbook-v2.yaml` file
+
+```yaml
+    - name: "Download Wordpress Package"
+      get_url:
+        url: 'https://wordpress.org/latest.tar.gz'
+        dest: '/tmp/wordpress.tar.gz'
+
+    - name: "Unpacking Wordpress Package"
+      unarchive:
+        src: '/tmp/wordpress.tar.gz'
+        dest: '/var/www/'
+        remote_src: yes
+      become: yes
+```
+
+---
+Execute Ansible playbook
+
+```bash
+    ansible-playbook ./lab_playbook-v2.yaml -i ./hosts.cfg
+```
