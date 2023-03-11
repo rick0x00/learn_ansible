@@ -248,3 +248,36 @@ Execute Ansible playbook
 ```bash
     ansible-playbook ./lab_playbook-v2.yaml -i ./hosts.cfg
 ```
+
+---
+Configuring Wordpress
+
+Add the following text to the end of the `./lab playbook-v2.yaml` file
+
+```yaml
+    - name: "Creating Wordpress Config file"
+      copy:
+        src: '/var/www/wordpress/wp-config-sample.php'
+        dest: '/var/www/wordpress/wp-config.php'
+        remote_src: yes
+      become: yes
+
+    - name: "Configuring Wordpress config file"
+      replace:
+        path: '/var/www/wordpress/wp-config-sample.php'
+        regexp: '{{ item.regex }}'
+        replace: '{{ item.value }}'
+      with_items:
+        - { regex: 'database_name_here', value: 'wordpress_db' }
+        - { regex: 'username_here', value: 'wordpress_user' }
+        - { regex: 'password_here', value: '12345' }
+      become: yes
+
+```
+
+---
+Execute Ansible playbook
+
+```bash
+    ansible-playbook ./lab_playbook-v2.yaml -i ./hosts.cfg
+```
