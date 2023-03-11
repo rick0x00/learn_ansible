@@ -1,6 +1,6 @@
 # Learning Ansible
 
-[Official Doccumentation](https://docs.ansible.com/ansible/latest/getting_started/index.html)
+[Official Documentation](https://docs.ansible.com/ansible/latest/getting_started/index.html)
 
 Ansible need a control node, control node needs a ssh client ans Ansible softwares.
 Ansible control node controller the all devices specified in INVENTORY
@@ -78,3 +78,6 @@ Testing Ansible playbook
 ```shell
     ansible-playbook ./provisioning.yaml -u vagrant -i hosts --private-key ./.vagrant/machines/wordpress/virtualbox/private_key
 ```
+
+---
+---
