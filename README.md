@@ -113,3 +113,57 @@ Executing Ansible playbook
 ```shell
     ansible-playbook ./lab_playbook.yaml -u vagrant -i hosts --private-key ./.vagrant/machines/wordpress/virtualbox/private_key
 ```
+
+---
+Updating Ansible Playbook(lab_playbook-v2.yaml)
+
+```yaml
+---
+- hosts: all
+  tasks:
+    - name: "install packages"
+    apt:
+        name: "{{ item }}"
+        state: latest
+    become: yes
+    with_items:
+        - php5
+        - apache2
+        - libapache2-mod-php5
+        - php5-gd
+        - libssh2-php
+        - php5-mcrypt
+        - mysql-server-5.6
+        - python-mysqldb
+        - php5-mysql
+```
+
+better
+
+```yaml
+---
+- hosts: all
+  tasks:
+    - name: "install packages"
+      apt:
+        name: [
+          'php5',
+          'apache2',
+          'libapache2-mod-php5',
+          'php5-gd',
+          'libssh2-php',
+          'php5-mcrypt',
+          'mysql-server-5.6',
+          'python-mysqldb',
+          'php5-mysql'
+          ]
+        state: latest
+      become: yes
+```
+
+---
+Executing Ansible playbook
+
+``` bash
+    ansible-playbook ./lab_playbook-v2.yaml -u vagrant -i hosts --private-key ./.vagrant/machines/wordpress/virtualbox/private_key
+```
