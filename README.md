@@ -167,3 +167,17 @@ Executing Ansible playbook
 ```bash
     ansible-playbook ./lab_playbook-v2.yaml -u vagrant -i hosts --private-key ./.vagrant/machines/wordpress/virtualbox/private_key
 ```
+
+---
+Updating Ansible Inventory
+
+```bash
+    echo -e "[wordpress]\n <host vagrant vm wordpress> ansible_user=vagrant ansible_ssh_private_key_file='./.vagrant/machines/wordpress/virtualbox/private_key'" >> ./hosts
+```
+
+---
+Executing Ansible playbook
+
+```bash
+    ansible-playbook ./lab_playbook-v2.yaml -i hosts
+```
