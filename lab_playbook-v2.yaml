@@ -1,5 +1,13 @@
 ---
 - hosts: all
+
+  handlers:
+    - name: restart apache
+      service:
+        name: apache2
+        state: restarted
+      become: yes
+
   tasks:
     - name: "install packages"
       apt:
@@ -32,7 +40,7 @@
 
     - name: "Download Wordpress Package"
       get_url:
-        url: 'https://wordpress.org/latest.tar.gz'
+        url: 'https://wordpress.org/wordpress-5.0.tar.gz'
         dest: '/tmp/wordpress.tar.gz'
 
     - name: "Unpacking Wordpress Package"
@@ -51,7 +59,7 @@
 
     - name: "Configuring Wordpress config file"
       replace:
-        path: '/var/www/wordpress/wp-config-sample.php'
+        path: '/var/www/wordpress/wp-config.php'
         regexp: '{{ item.regex }}'
         replace: '{{ item.value }}'
       with_items:
@@ -59,3 +67,12 @@
         - { regex: 'username_here', value: 'wordpress_user' }
         - { regex: 'password_here', value: '12345' }
       become: yes
+
+    - name: "Configuring Apache "
+      replace:
+        path: '/etc/apache2/sites-available/000-default.conf'
+        regexp: '/var/www/html'
+        replace: '/var/www/wordpress'
+      become: yes
+      notify:
+        - restart apache

@@ -231,7 +231,7 @@ Add the following text to the end of the `./lab playbook-v2.yaml` file
 ```yaml
     - name: "Download Wordpress Package"
       get_url:
-        url: 'https://wordpress.org/latest.tar.gz'
+        url: 'https://wordpress.org/wordpress-5.0.tar.gz'
         dest: '/tmp/wordpress.tar.gz'
 
     - name: "Unpacking Wordpress Package"
@@ -264,7 +264,7 @@ Add the following text to the end of the `./lab playbook-v2.yaml` file
 
     - name: "Configuring Wordpress config file"
       replace:
-        path: '/var/www/wordpress/wp-config-sample.php'
+        path: '/var/www/wordpress/wp-config.php'
         regexp: '{{ item.regex }}'
         replace: '{{ item.value }}'
       with_items:
@@ -273,6 +273,40 @@ Add the following text to the end of the `./lab playbook-v2.yaml` file
         - { regex: 'password_here', value: '12345' }
       become: yes
 
+```
+
+---
+Execute Ansible playbook
+
+```bash
+    ansible-playbook ./lab_playbook-v2.yaml -i ./hosts.cfg
+```
+
+---
+Configuring Apache
+
+Add the following text to the end of the `./lab playbook-v2.yaml` file
+
+```yaml
+    - name: "Configuring Apache "
+      replace:
+        path: '/etc/apache2/sites-available/000-default.conf'
+        regexp: '/var/www/html'
+        replace: '/var/www/wordpress'
+      become: yes
+      notify:
+        - restart apache
+```
+
+Add the following text to the start of the `./lab playbook-v2.yaml` file
+
+```yaml
+  handlers:
+    - name: restart apache
+      service:
+        name: apache2
+        state: restarted
+      become: yes
 ```
 
 ---
