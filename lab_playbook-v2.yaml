@@ -1,5 +1,50 @@
 ---
-- hosts: all
+- hosts: mysql
+  handlers:
+    - name: "restart mysql"
+      service:
+        name: mysql
+        state: restarted
+      become: yes
+
+  tasks:
+    - name: "Install Packages"
+      apt:
+        name:
+          - mysql-server-5.6
+          -  python-mysqldb
+        state: latest
+      become: yes
+
+    - name: 'Making MySQL db'
+      mysql_db: 
+        name: wordpress_db
+        login_user: root
+        state: present
+
+    - name: 'Creating MySQL database user'
+      mysql_user:
+        login_user: root
+        name: wordpress_user
+        password: '12345'
+        priv: 'wordpress_db.*:ALL'
+        state: present
+        host: "{{ item }}"
+      with_items:
+        - 'localhost'
+        - '127.0.0.1'
+        - '192.168.56.40'
+
+    - name: "Configuring MySQL"
+      replace:
+        path: '/etc/mysql/my.cnf'
+        regexp: '127.0.0.1'
+        replace: '0.0.0.0'
+      become: yes
+      notify:
+        - restart mysql
+
+- hosts: wordpress
 
   handlers:
     - name: restart apache
@@ -18,25 +63,9 @@
           - php5-gd
           - libssh2-php
           - php5-mcrypt
-          - mysql-server-5.6
-          - python-mysqldb
           - php5-mysql
         state: latest
       become: yes
-
-    - name: 'Making MySQL db'
-      mysql_db: 
-        name: wordpress_db
-        login_user: root
-        state: present
-
-    - name: 'Creating MySQL database user'
-      mysql_user:
-        login_user: root
-        name: wordpress_user
-        password: 12345
-        priv: 'wordpress_db.*:ALL'
-        state: present
 
     - name: "Download Wordpress Package"
       get_url:
@@ -66,6 +95,7 @@
         - { regex: 'database_name_here', value: 'wordpress_db' }
         - { regex: 'username_here', value: 'wordpress_user' }
         - { regex: 'password_here', value: '12345' }
+        - { regex: 'localhost', value: '192.168.56.41' }
       become: yes
 
     - name: "Configuring Apache "
