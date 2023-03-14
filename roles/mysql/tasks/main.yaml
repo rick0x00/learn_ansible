@@ -1,0 +1,36 @@
+---
+- name: "Install Packages"
+  apt:
+    name:
+      - mysql-server-5.6
+      -  python-mysqldb
+    state: latest
+  become: yes
+
+- name: 'Making MySQL db'
+  mysql_db: 
+    name: "{{ wp_db_name }}"
+    login_user: root
+    state: present
+
+- name: 'Creating MySQL database user'
+  mysql_user:
+    login_user: root
+    name: "{{ wp_db_user }}"
+    password: "{{ wp_db_password }}"
+    priv: "{{ wp_db_name }}.*:ALL"
+    state: present
+    host: "{{ item }}"
+  with_items:
+    - 'localhost'
+    - '127.0.0.1'
+    - "{{ wp_host }}"
+
+- name: "Configuring MySQL"
+  replace:
+    path: '/etc/mysql/my.cnf'
+    regexp: '127.0.0.1'
+    replace: '0.0.0.0'
+  become: yes
+  notify:
+    - restart mysql
