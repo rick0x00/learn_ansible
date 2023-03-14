@@ -5,5 +5,4 @@
 
 - hosts: wordpress
   roles:
-    - webserver
     - wordpress
