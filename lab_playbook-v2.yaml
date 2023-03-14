@@ -18,22 +18,22 @@
 
     - name: 'Making MySQL db'
       mysql_db: 
-        name: wordpress_db
+        name: "{{ wp_db_name }}"
         login_user: root
         state: present
 
     - name: 'Creating MySQL database user'
       mysql_user:
         login_user: root
-        name: wordpress_user
-        password: '12345'
-        priv: 'wordpress_db.*:ALL'
+        name: "{{ wp_db_user }}"
+        password: "{{ wp_db_password }}"
+        priv: "{{ wp_db_name }}.*:ALL"
         state: present
         host: "{{ item }}"
       with_items:
         - 'localhost'
         - '127.0.0.1'
-        - '192.168.56.40'
+        - "{{ wp_host }}"
 
     - name: "Configuring MySQL"
       replace:
@@ -81,28 +81,28 @@
 
     - name: "Creating Wordpress Config file"
       copy:
-        src: '/var/www/wordpress/wp-config-sample.php'
-        dest: '/var/www/wordpress/wp-config.php'
+        src: "{{ wp_workdir }}/wp-config-sample.php"
+        dest: "{{ wp_workdir }}/wp-config.php"
         remote_src: yes
       become: yes
 
     - name: "Configuring Wordpress config file"
       replace:
-        path: '/var/www/wordpress/wp-config.php'
-        regexp: '{{ item.regex }}'
-        replace: '{{ item.value }}'
+        path: "{{ wp_workdir }}/wp-config.php"
+        regexp: "{{ item.regex }}"
+        replace: "{{ item.value }}"
       with_items:
-        - { regex: 'database_name_here', value: 'wordpress_db' }
-        - { regex: 'username_here', value: 'wordpress_user' }
-        - { regex: 'password_here', value: '12345' }
-        - { regex: 'localhost', value: '192.168.56.41' }
+        - { regex: 'database_name_here', value: "{{ wp_db_name }}" }
+        - { regex: 'username_here', value: "{{ wp_db_user }}" }
+        - { regex: 'password_here', value: "{{ wp_db_password }}" }
+        - { regex: 'localhost', value: "{{ wp_db_host }}" }
       become: yes
 
     - name: "Configuring Apache "
       replace:
         path: '/etc/apache2/sites-available/000-default.conf'
         regexp: '/var/www/html'
-        replace: '/var/www/wordpress'
+        replace: "{{ wp_workdir }}"
       become: yes
       notify:
         - restart apache
